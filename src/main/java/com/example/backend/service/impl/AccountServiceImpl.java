@@ -97,9 +97,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public AccountEntity update(AccountDto accountDto) {
-        AccountEntity accountEntity = accountRepository.findAccountEntityByEmail(accountDto.getEmail()).orElseThrow(() -> {
-            throw new ResourceNotFoundException("account not exist");
-        });
+        AccountEntity accountEntity = accountRepository.findAccountEntityByEmail(accountDto.getEmail()).get();
         Cloudinary cloudinary = new Cloudinary(cloudinary_url);
         cloudinary.config.secure = true;
         try {
@@ -149,9 +147,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public AuthenticationDto loginTraditional(AccountDto accountDto) {
-        AccountEntity accountEntity = accountRepository.findAccountEntityByEmailAndPassword(accountDto.getEmail(), accountDto.getPassword()).orElseThrow(() -> {
-            throw new ResourceNotFoundException("email or password invalid");
-        });
+        AccountEntity accountEntity = accountRepository.findAccountEntityByEmailAndPassword(accountDto.getEmail(), accountDto.getPassword()).get();
         JsonWebToken jsonWebToken = new JsonWebToken(jwtTokenUtil.generateToken(accountDto.getEmail(), JwtTokenUtil.JWT_ACCESS_TOKEN_VALIDITY), jwtTokenUtil.generateToken(accountDto.getEmail(), JwtTokenUtil.JWT_REFRESH_TOKEN_VALIDITY));
         AuthenticationDto authenticationDto = new AuthenticationDto();
         authenticationDto.setJsonWebToken(jsonWebToken);
@@ -164,9 +160,7 @@ public class AccountServiceImpl implements AccountService {
     public JsonWebToken refreshToken(String refreshToken) {
         try {
             String email = jwtTokenUtil.getEmailFromToken(refreshToken);
-            AccountEntity accountEntity = accountRepository.findAccountEntityByEmail(email).orElseThrow(() -> {
-                throw new ResourceNotFoundException("refreshToken invalid");
-            });
+            AccountEntity accountEntity = accountRepository.findAccountEntityByEmail(email).get();
             if (jwtTokenUtil.validateToken(refreshToken, accountEntity.getEmail())) {
                 String accessToken = jwtTokenUtil.generateToken(accountEntity.getEmail(), JwtTokenUtil.JWT_ACCESS_TOKEN_VALIDITY);
                 return new JsonWebToken(accessToken, refreshToken);
