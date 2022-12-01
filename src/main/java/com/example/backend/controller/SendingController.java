@@ -21,21 +21,21 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 @RequiredArgsConstructor
 public class SendingController extends BaseController {
     private final SimpMessagingTemplate simpMessagingTemplate;
-    @GetMapping("socket")
-    public void greeting(String message) throws Exception {
-        log.error(message);
-        Message<String> data = new Message<>() {
-            @Override
-            public String getPayload() {
-                return "hello";
-            }
-
-            @Override
-            public MessageHeaders getHeaders() {
-                return null;
-            }
-        };
-        simpMessagingTemplate.send("/topic/greetings",data);
-    }
+//    @GetMapping("socket")
+//    public void greeting(String message) throws Exception {
+//        log.error(message);
+//        Message<String> data = new Message<>() {
+//            @Override
+//            public String getPayload() {
+//                return "hello";
+//            }
+//
+//            @Override
+//            public MessageHeaders getHeaders() {
+//                return null;
+//            }
+//        };
+//        simpMessagingTemplate.send("/topic/greetings",data);
+//    }
 
 }
