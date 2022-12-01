@@ -69,13 +69,13 @@ public class AccountController extends BaseController {
     public ResponseEntity<List<RoomDto>> getListRoomCreated(String email) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(roomService.getListRoomCreated(email).stream().map(roomMapper::entityToDto).toList());
+                .body((List<RoomDto>) roomService.getListRoomCreated(email).stream().map(roomMapper::entityToDto));
     }
 
     @GetMapping("listRoomJoined")
     public ResponseEntity<List<RoomDto>> getListRoomJoined(String email) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(roomService.fetchRoomsJoined(email).stream().map(roomMapper::entityToDto).toList());
+                .body((List<RoomDto>) roomService.fetchRoomsJoined(email).stream().map(roomMapper::entityToDto));
     }
 }
