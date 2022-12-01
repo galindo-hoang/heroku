@@ -11,6 +11,7 @@
     <groupId>com.example</groupId>
     <artifactId>backend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
     <name>backend</name>
     <description>backend</description>
     <properties>
@@ -118,8 +119,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>11</source>
-                    <target>11</target>
+                    <source>18</source>
+                    <target>18</target>
                     <annotationProcessorPaths>
                         <path>
                             <groupId>org.projectlombok</groupId>
@@ -137,10 +138,6 @@
                             <version>1.5.2.Final</version>
                         </path>
                     </annotationProcessorPaths>
-
-                    <processTypes>
-                        <web>java $JAVA_OPTS -cp target/classes:target/dependency/* Main</web>
-                    </processTypes>
                 </configuration>
             </plugin>
 
@@ -161,13 +158,33 @@
                 </executions>
             </plugin>
 
-            <plugins>
-                <plugin>
-                    <groupId>com.heroku.sdk</groupId>
-                    <artifactId>heroku-maven-plugin</artifactId>
-                    <version>3.0.5</version>
-                </plugin>
-            </plugins>
+<!--            <plugins>-->
+<!--                <plugin>-->
+<!--                    <groupId>com.heroku.sdk</groupId>-->
+<!--                    <artifactId>heroku-maven-plugin</artifactId>-->
+<!--                    <version>3.0.5</version>-->
+<!--                </plugin>-->
+<!--            </plugins>-->
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.0</version>
+                <executions>
+                    <execution>
+                        <id>tomcat-run</id>
+                        <goals>
+                            <goal>exec-war-only</goal>
+                        </goals>
+                        <phase>package</phase>
+                        <configuration>
+                            <path>/</path>
+                            <enableNaming>false</enableNaming>
+                            <finalName>webapp.jar</finalName>
+                            <charset>utf-8</charset>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
