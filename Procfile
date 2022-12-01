@@ -1,1 +1,1 @@
-web: java -jar target/backend.jar
+web: java -jar target/webapp.jar
