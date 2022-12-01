@@ -71,7 +71,7 @@ public class AccountServiceImpl implements AccountService {
         authenticationDto.setAccountStatus(AccountStatus.OLD_USER);
         AccountDto accountDto = convertOAuthToAccount(oAuth2AuthenticationToken.getPrincipal().getAttributes());
         Optional<AccountEntity> accountEntity = accountRepository.findAccountEntityByEmail(accountDto.getEmail());
-        if (accountEntity.isEmpty()) {
+        if (accountEntity == null) {
             String otp = CodeGeneratorUtils.invoke();
             cacheAccount.put(accountDto.getEmail(), accountDto);
             cacheOTP.put(accountDto.getEmail(), otp);

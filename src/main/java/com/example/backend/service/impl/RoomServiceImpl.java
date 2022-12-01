@@ -55,7 +55,7 @@ public class RoomServiceImpl implements RoomService {
         AccountEntity accountEntity = accountRepository
                 .findAccountEntityByEmail(createRoomRequest.getEmail())
                 .orElseThrow(() -> new ResourceNotFoundException("invalid"/*.formatted(createRoomRequest.getEmail())*/));
-        if (roomRepository.findRoomEntityByName(createRoomRequest.getName()).isEmpty()) {
+        if (roomRepository.findRoomEntityByName(createRoomRequest.getName()) == null) {
             RoomEntity roomEntity = new RoomEntity();
             roomEntity.setName(createRoomRequest.getName());
             roomEntity.setCode(CodeGeneratorUtils.invoke());
