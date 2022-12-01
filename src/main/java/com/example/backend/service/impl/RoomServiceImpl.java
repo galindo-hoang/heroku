@@ -34,10 +34,10 @@ public class RoomServiceImpl implements RoomService {
     public UserRoomEntity join(JoinRequest joinRequest) {
         AccountEntity accountEntity = accountRepository
                 .findAccountEntityByEmail(joinRequest.getEmail())
-                .orElseThrow(() -> new ResourceNotFoundException("account " + joinRequest.getEmail() + " not found"));
+                .get();
         RoomEntity roomEntity = roomRepository
                 .findRoomEntityByUrl(joinRequest.getUrl())
-                .orElseThrow(() -> new ResourceNotFoundException("Room not found"));
+                .get();
         List<UserRoomEntity> checking = userRoomRepository.fetchDataFromAccountAndRoom(accountEntity.getId(), roomEntity.getId());
         if(!checking.isEmpty()) throw new ResourceInvalidException("account " + joinRequest.getEmail() + " exists in room");
         if (roomEntity.getCode().equals(joinRequest.getCode())) {
@@ -54,7 +54,7 @@ public class RoomServiceImpl implements RoomService {
     public RoomEntity createRoom(CreateRoomRequest createRoomRequest) {
         AccountEntity accountEntity = accountRepository
                 .findAccountEntityByEmail(createRoomRequest.getEmail())
-                .orElseThrow(() -> new ResourceNotFoundException("invalid"/*.formatted(createRoomRequest.getEmail())*/));
+                .get();
         if (roomRepository.findRoomEntityByName(createRoomRequest.getName()) == null) {
             RoomEntity roomEntity = new RoomEntity();
             roomEntity.setName(createRoomRequest.getName());
@@ -75,9 +75,9 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public Boolean removeMember(RemoveMemberRequest removeMemberRequest) {
-        AccountEntity accountEntity = accountRepository.findAccountEntityByEmail(removeMemberRequest.getGmail()).orElseThrow(() -> {throw new ResourceNotFoundException("email invalid");});
-        RoomEntity roomEntity = roomRepository.findRoomEntityByName(removeMemberRequest.getNameRoom()).orElseThrow(() -> {throw new ResourceNotFoundException("room invalid");});
-        UserRoomEntity userRoomEntity = userRoomRepository.findUserRoomEntityByUserId_IdAndRoomId_Id(accountEntity.getId(), roomEntity.getId()).orElseThrow(() -> {throw new ResourceNotFoundException("user not in room");});
+        AccountEntity accountEntity = accountRepository.findAccountEntityByEmail(removeMemberRequest.getGmail()).get();
+        RoomEntity roomEntity = roomRepository.findRoomEntityByName(removeMemberRequest.getNameRoom()).get();
+        UserRoomEntity userRoomEntity = userRoomRepository.findUserRoomEntityByUserId_IdAndRoomId_Id(accountEntity.getId(), roomEntity.getId()).get();
         accountEntity.removeUserRoom(userRoomEntity);
         roomEntity.removeUserRoom(userRoomEntity);
         userRoomRepository.delete(userRoomEntity);
